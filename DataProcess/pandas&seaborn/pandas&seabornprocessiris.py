@@ -1,7 +1,7 @@
 import pandas
 import seaborn
 import matplotlib.pyplot as plt #pycharm上显示图像的方法
-from scipy import stats
+
 iris = pandas.read_csv("iris.csv");
 #print(iris.head());
 #print(iris.tail());
@@ -14,7 +14,7 @@ iris = pandas.read_csv("iris.csv");
 #seaborn.boxplot(x='Species', y='PetalLengthCm', data=iris);  #箱型图
 #seaborn.boxplot(x='Species', y='PetalWidthCm', data=iris);  #箱型图
 #seaborn.distplot(iris['PetalWidthCm'], kde=False, fit=stats.gamma);  #直方图,模型参数拟合(匹配出最相近的模型图形)
-seaborn.distplot(iris['PetalWidthCm']);  #直方图
+#seaborn.distplot(iris['PetalWidthCm']);  #直方图
 
 """ #pandas实现数据整合后放在一张表里面显示
 iris_vir = iris[iris.Species == "Iris-virginica"];
@@ -37,10 +37,10 @@ g = seaborn.FacetGrid(iris, hue='Species');
 g.set(xlim=(0,2.5));
 g.map(seaborn.regplot, 'PetalWidthCm', 'PetalLengthCm');
 '''
-'''
+
 #matplotlib.pyplo实现散点图
 g = seaborn.FacetGrid(iris, hue='Species');
 g.set(xlim=(0,2.5));
 g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm');
-'''
+
 plt.show();  #pycharm上显示图像的方法
