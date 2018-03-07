@@ -34,6 +34,7 @@ seaborn.distplot(users_with_true_age["age"])
 """
 #seaborn.distplot(commde)
 #seaborn.boxplot(commde)
+#print(type(users["age"]))
 users_with_true_age = users[users["age"]<90]
 #seaborn.boxplot(users_with_true_age["age"])
 users_with_true_age = users[users["age"]<90]
