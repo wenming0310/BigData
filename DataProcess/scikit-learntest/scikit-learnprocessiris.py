@@ -2,7 +2,9 @@ import pandas,seaborn
 import matplotlib.pyplot as plt #pycharm上显示图像的方法
 from sklearn import  linear_model
 from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import LabelEncoder
 import numpy as np
+from sklearn import neighbors
 
 iris = pandas.read_csv("..\\pandas&seaborn\\iris.csv");
 #sample5 = iris.sample(5);
@@ -29,8 +31,8 @@ print(model.intercept_, model.coef_);
 #-0.013852011013003152 [ 0.44992999 -0.08190841]    #2
 #y = -0.013852011013003152 + 0.44992999*X1 + (-0.08190841*X2)   #2
 '''
-
-#检验回归模型
+'''
+#交叉检验回归模型
 lm = linear_model.LinearRegression();
 #features=['PetalLengthCm'];    #1 X
 #features=['PetalLengthCm', 'SepalLengthCm'];    #2 X1 X2
@@ -41,9 +43,35 @@ y = iris['PetalWidthCm'];
 #score = -cross_val_score(lm, X, y, cv=5, scoring='neg_mean_absolute_error');
 score = -cross_val_score(lm, X, y, cv=5, scoring='neg_mean_squared_error');
 print(np.mean(score));
+'''
+'''
+#分类及逻辑回归
+le = LabelEncoder();
+le.fit(iris['Species']);
 
+#lm = linear_model.LinearRegression();
+lm = linear_model.LogisticRegression();
+#features=['PetalLengthCm'];    #1 X
+#features=['PetalLengthCm', 'SepalLengthCm'];    #2 X1 X2
+features=['PetalLengthCm', 'PetalWidthCm', 'SepalLengthCm', 'SepalWidthCm'];    #3 X1 X2 X3 选对预测组合是很重要的
+X = iris[features];
+y = le.transform(iris['Species']);
+#print(y)
+score = cross_val_score(lm, X, y, cv=5, scoring='accuracy');
+print(np.mean(score));
+'''
+#K近邻
+le = LabelEncoder();
+le.fit(iris['Species']);
+features=['PetalLengthCm', 'PetalWidthCm', 'SepalLengthCm', 'SepalWidthCm'];    #3 X1 X2 X3 选对预测组合是很重要的
+X = iris[features];
+y = le.transform(iris['Species']);
+#knn = neighbors.KNeighborsClassifier(5, weights='distance')
+knn = neighbors.KNeighborsClassifier(6, weights='uniform')
+scores = cross_val_score(knn, X, y, cv=5, scoring='accuracy')
+print(np.mean(scores));
 
-
+#决策树，大部分为二叉树
 
 
 plt.show()
