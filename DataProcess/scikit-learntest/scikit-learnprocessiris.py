@@ -5,6 +5,8 @@ from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 from sklearn import neighbors
+from sklearn import tree
+from sklearn import ensemble
 
 iris = pandas.read_csv("..\\pandas&seaborn\\iris.csv");
 #sample5 = iris.sample(5);
@@ -60,6 +62,7 @@ y = le.transform(iris['Species']);
 score = cross_val_score(lm, X, y, cv=5, scoring='accuracy');
 print(np.mean(score));
 '''
+'''
 #K近邻
 le = LabelEncoder();
 le.fit(iris['Species']);
@@ -70,8 +73,32 @@ y = le.transform(iris['Species']);
 knn = neighbors.KNeighborsClassifier(6, weights='uniform')
 scores = cross_val_score(knn, X, y, cv=5, scoring='accuracy')
 print(np.mean(scores));
-
+'''
+'''
 #决策树，大部分为二叉树
+dt = tree.DecisionTreeClassifier();
+le = LabelEncoder();
+le.fit(iris['Species']);
+features=['PetalLengthCm', 'PetalWidthCm', 'SepalLengthCm', 'SepalWidthCm'];    #3 X1 X2 X3 选对预测组合是很重要的
+X = iris[features];
+y = le.transform(iris['Species']);
+scores = cross_val_score(dt, X, y, cv=5, scoring='accuracy');
+print(np.mean(scores));
+'''
 
+#随机森林
+#rf = ensemble.RandomForestClassifier(10);
+le = LabelEncoder();
+le.fit(iris['Species']);
+features=['PetalLengthCm', 'PetalWidthCm', 'SepalLengthCm', 'SepalWidthCm'];    #3 X1 X2 X3 选对预测组合是很重要的
+X = iris[features];
+y = le.transform(iris['Species']);
+#scores = cross_val_score(rf, X, y, cv=5, scoring='accuracy');
+#print(np.mean(scores));
+
+#随机森林回归
+rf = ensemble.RandomForestRegressor(50);
+scores = -cross_val_score(rf, X, y, cv=5, scoring='neg_mean_squared_error');
+print(np.mean(scores));
 
 plt.show()
