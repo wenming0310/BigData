@@ -1,4 +1,5 @@
 import pandas,seaborn
+import  seaborn as sns
 import matplotlib.pyplot as plt #pycharm上显示图像的方法
 from sklearn import  linear_model
 from sklearn.model_selection import cross_val_score
@@ -7,6 +8,7 @@ import numpy as np
 from sklearn import neighbors
 from sklearn import tree
 from sklearn import ensemble
+from  sklearn.cluster import KMeans
 
 iris = pandas.read_csv("..\\pandas&seaborn\\iris.csv");
 #sample5 = iris.sample(5);
@@ -85,7 +87,7 @@ y = le.transform(iris['Species']);
 scores = cross_val_score(dt, X, y, cv=5, scoring='accuracy');
 print(np.mean(scores));
 '''
-
+'''
 #随机森林
 #rf = ensemble.RandomForestClassifier(10);
 le = LabelEncoder();
@@ -100,5 +102,25 @@ y = le.transform(iris['Species']);
 rf = ensemble.RandomForestRegressor(50);
 scores = -cross_val_score(rf, X, y, cv=5, scoring='neg_mean_squared_error');
 print(np.mean(scores));
+'''
+
+#聚类问题
+'''
+  #数据演示
+#%matplotlib inline
+g = sns.FacetGrid(iris, hue='Species');
+g.set(xlim=(0, 2.5), ylim=(0, 7));
+g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm').add_legend();
+'''
+  #聚类
+X = iris[[ 'PetalWidthCm', 'PetalLengthCm']];
+#km = KMeans(2);
+km = KMeans(3);
+km.fit(X);
+#iris['cluster_k2'] = km.predict(X);
+iris['cluster_k3'] = km.predict(X);
+g = sns.FacetGrid(iris, hue='cluster_k3');
+g.set(xlim=(0, 2.5), ylim=(0, 7));
+g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm').add_legend();
 
 plt.show()
