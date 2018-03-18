@@ -9,11 +9,13 @@ from sklearn import neighbors
 from sklearn import tree
 from sklearn import ensemble
 from  sklearn.cluster import KMeans
-
+from  sklearn.cluster import DBSCAN
+from sklearn import datasets
+from pandas import DataFrame
 iris = pandas.read_csv("..\\pandas&seaborn\\iris.csv");
 #sample5 = iris.sample(5);
 #print(sample5)
-
+#计算回归模型
 '''#计算回归模型
 #matplotlib inline
 #seaborn.regplot(x='PetalLengthCm', y='PetalWidthCm', data=iris)
@@ -35,6 +37,7 @@ print(model.intercept_, model.coef_);
 #-0.013852011013003152 [ 0.44992999 -0.08190841]    #2
 #y = -0.013852011013003152 + 0.44992999*X1 + (-0.08190841*X2)   #2
 '''
+#交叉检验回归模型
 '''
 #交叉检验回归模型
 lm = linear_model.LinearRegression();
@@ -48,6 +51,7 @@ y = iris['PetalWidthCm'];
 score = -cross_val_score(lm, X, y, cv=5, scoring='neg_mean_squared_error');
 print(np.mean(score));
 '''
+#分类及逻辑回归
 '''
 #分类及逻辑回归
 le = LabelEncoder();
@@ -64,6 +68,7 @@ y = le.transform(iris['Species']);
 score = cross_val_score(lm, X, y, cv=5, scoring='accuracy');
 print(np.mean(score));
 '''
+#K近邻
 '''
 #K近邻
 le = LabelEncoder();
@@ -76,6 +81,7 @@ knn = neighbors.KNeighborsClassifier(6, weights='uniform')
 scores = cross_val_score(knn, X, y, cv=5, scoring='accuracy')
 print(np.mean(scores));
 '''
+#决策树
 '''
 #决策树，大部分为二叉树
 dt = tree.DecisionTreeClassifier();
@@ -87,6 +93,7 @@ y = le.transform(iris['Species']);
 scores = cross_val_score(dt, X, y, cv=5, scoring='accuracy');
 print(np.mean(scores));
 '''
+#随机森林
 '''
 #随机森林
 #rf = ensemble.RandomForestClassifier(10);
@@ -103,7 +110,6 @@ rf = ensemble.RandomForestRegressor(50);
 scores = -cross_val_score(rf, X, y, cv=5, scoring='neg_mean_squared_error');
 print(np.mean(scores));
 '''
-
 #聚类问题
 '''
   #数据演示
@@ -111,6 +117,7 @@ print(np.mean(scores));
 g = sns.FacetGrid(iris, hue='Species');
 g.set(xlim=(0, 2.5), ylim=(0, 7));
 g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm').add_legend();
+'''
 '''
   #聚类
 X = iris[[ 'PetalWidthCm', 'PetalLengthCm']];
@@ -122,5 +129,42 @@ iris['cluster_k3'] = km.predict(X);
 g = sns.FacetGrid(iris, hue='cluster_k3');
 g.set(xlim=(0, 2.5), ylim=(0, 7));
 g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm').add_legend();
+'''
+
+#DBSCAN
+#两个同心圆数据生成
+noisy_circles = datasets.make_circles(n_samples=1000, factor=.5, noise=.05);
+#print(noisy_circles);
+
+df = DataFrame();
+df['x1'] = noisy_circles[0][:,0];
+df['x2'] = noisy_circles[0][:,1];
+df['label'] = noisy_circles[1];
+#print(df.sample(10));
+'''
+#数据演示
+#%matplotlib inline
+g = sns.FacetGrid(df, hue='label')
+g.map(plt.scatter, 'x1', 'x2').add_legend()
+'''
+'''
+#K均值聚类产生错误分类
+km = KMeans(2)
+X = df[['x1', 'x2']]
+km.fit(X)
+df['kmeans_label'] = km.labels_
+g = sns.FacetGrid(df, hue='kmeans_label')
+g.map(plt.scatter, 'x1', 'x2').add_legend()
+'''
+#DBSCAN，使用时注意调增eps值
+dbscan = DBSCAN(eps=0.15, min_samples=10)
+X = df[['x1', 'x2']]
+dbscan.fit(X)
+df['dbscan_label'] = dbscan.labels_
+g = sns.FacetGrid(df, hue='dbscan_label')
+g.map(plt.scatter, 'x1', 'x2').add_legend()
+#回归、分类属于监督学习，需要x和y，检测模型性能时需要使用交叉检验（区分出训练集和测试集）
+#聚类属于无监督学习，只需要x（两大类Kmeans、SBSCAN）
+
 
 plt.show()
