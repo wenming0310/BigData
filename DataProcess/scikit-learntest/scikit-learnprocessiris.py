@@ -132,6 +132,7 @@ g.map(plt.scatter, 'PetalWidthCm', 'PetalLengthCm').add_legend();
 '''
 
 #DBSCAN
+"""
 #两个同心圆数据生成
 noisy_circles = datasets.make_circles(n_samples=1000, factor=.5, noise=.05);
 #print(noisy_circles);
@@ -165,6 +166,8 @@ g = sns.FacetGrid(df, hue='dbscan_label')
 g.map(plt.scatter, 'x1', 'x2').add_legend()
 #回归、分类属于监督学习，需要x和y，检测模型性能时需要使用交叉检验（区分出训练集和测试集）
 #聚类属于无监督学习，只需要x（两大类Kmeans、SBSCAN）
+"""
 
+#Gini Importance
 
 plt.show()
