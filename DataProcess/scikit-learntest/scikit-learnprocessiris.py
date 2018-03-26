@@ -1,5 +1,5 @@
 import pandas,seaborn
-import  seaborn as sns
+import seaborn as sns
 import matplotlib.pyplot as plt #pycharm上显示图像的方法
 from sklearn import  linear_model
 from sklearn.model_selection import cross_val_score
